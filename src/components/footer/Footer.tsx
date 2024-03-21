@@ -6,7 +6,7 @@ import {
 import { IoLocationOutline } from "react-icons/io5";
 const Footer = () => {
   return (
-    <footer className="bg-cBlue text-cWhite grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4  justify-center items-center p-16 mt-8">
+    <footer className="bg-cBlue text-cWhite grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4  justify-center items-center p-16 ">
       <div className="flex-[1] flex items-center gap-2">
         <p>
           <IoLocationOutline />
