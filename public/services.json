@@ -1,0 +1,23 @@
+[
+  {
+    "image": "https://i.ibb.co/QCWh62Y/s1.png",
+    "title": "Office interior design",
+    "price": 299,
+    "desc": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, nihil?"
+    
+  },
+  {
+    "image": "https://i.ibb.co/NpP0f2b/s2.png",
+    "title": "Showroom Design",
+    "price": 399,
+    "desc": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, nihil?"
+    
+  },
+  {
+    "image": "https://i.ibb.co/dKSRVgb/s3.png",
+    "title": "Residential/ Home",
+    "price": 499,
+    "desc": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae, nihil?"
+    
+  }
+]
