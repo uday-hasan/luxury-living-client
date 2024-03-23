@@ -2,9 +2,18 @@ import { serviceType } from "@/components/Home/services/Services";
 import React, { Dispatch, SetStateAction } from "react";
 import { useAuth } from "../auth-context/AuthContext";
 
+type ConfirmOrderType = {
+  _id: string;
+  orders: serviceType[];
+  userId: string;
+  paymentId: string;
+  createdAt: Date;
+};
 type OrderType = {
   orders: serviceType[];
   setOrders: Dispatch<SetStateAction<serviceType[]>>;
+  confirmOrders: ConfirmOrderType[];
+  setConfirmOrders: Dispatch<SetStateAction<ConfirmOrderType[]>>;
   message: { type: string; message: string };
   setMessage: Dispatch<SetStateAction<{ type: string; message: string }>>;
   addToCart: (id: string | undefined) => void;
@@ -14,6 +23,8 @@ type OrderType = {
 const orderProvider = React.createContext<OrderType>({
   orders: [],
   setOrders: () => {},
+  confirmOrders: [],
+  setConfirmOrders: () => {},
   message: { message: "", type: "error" },
   setMessage: () => {},
   addToCart: () => {},
@@ -25,6 +36,9 @@ export const useOrder = () => React.useContext(orderProvider);
 const OrderContext = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
   const [orders, setOrders] = React.useState<serviceType[]>([]);
+  const [confirmOrders, setConfirmOrders] = React.useState<ConfirmOrderType[]>(
+    []
+  );
   const [message, setMessage] = React.useState({
     type: "error",
     message: "",
@@ -88,9 +102,30 @@ const OrderContext = ({ children }: { children: React.ReactNode }) => {
     getOrders();
   }, [user?._id]);
 
+  // Get order which is confirmed by payment
+  React.useEffect(() => {
+    const getOrders = async () => {
+      const response = await fetch(
+        `http://localhost:5000/confirm-order/${user?._id}`
+      );
+      const data = await response.json();
+      setConfirmOrders(data.data);
+    };
+    getOrders();
+  }, [user?._id]);
+
   return (
     <orderProvider.Provider
-      value={{ orders, setOrders, message, setMessage, addToCart, Delete }}
+      value={{
+        orders,
+        setOrders,
+        message,
+        setMessage,
+        addToCart,
+        Delete,
+        confirmOrders,
+        setConfirmOrders,
+      }}
     >
       {children}
     </orderProvider.Provider>

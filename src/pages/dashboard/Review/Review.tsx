@@ -33,24 +33,25 @@ const Review = () => {
       </div>
       <div>
         {commentsForUser?.length ? (
-          <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {commentsForUser.map((comment) => {
               return (
-                <div key={comment._id}>
-                  <div className="flex  justify-between text-xl font-medium text-cBlue">
-                    <h1>Service Name: {comment?.productName}</h1>
-                    <h1>
-                      Posted On:
-                      {new Date(comment?.createdAt).toLocaleDateString()}
-                    </h1>
-                    <div>
-                      <ButtonShared
-                        title="Delete"
-                        onclick={() => delete_comment(comment?._id)}
-                      />
-                    </div>
-                  </div>
+                <div
+                  key={comment?._id}
+                  className="flex flex-col gap-4 justify-between bg-cWhite p-4 min-h-[6em]  text-xl font-medium text-cBlue "
+                >
+                  <h1>Service Name: {comment?.productName}</h1>
+                  <h1>
+                    Posted On:
+                    {new Date(comment?.createdAt).toLocaleDateString()}
+                  </h1>
                   <p className="text-2xl font-light">{comment?.comment}</p>
+                  <div>
+                    <ButtonShared
+                      title="Delete"
+                      onclick={() => delete_comment(comment?._id)}
+                    />
+                  </div>
                 </div>
               );
             })}
