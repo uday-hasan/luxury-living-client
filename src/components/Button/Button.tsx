@@ -4,13 +4,15 @@ const ButtonShared = ({
   title,
   type,
   onclick,
+  disabled,
 }: {
   title: string;
   type?: "submit" | undefined;
   onclick?: () => void;
+  disabled?: boolean;
 }) => {
   return (
-    <Button type={type} onClick={onclick}>
+    <Button disabled={disabled} type={type} onClick={onclick}>
       {title}
     </Button>
   );

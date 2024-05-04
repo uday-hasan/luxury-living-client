@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 const DashboardLayout = () => {
   return (
     <div className="flex min-h-[50vh] transition-all">
-      <div className="flex-[1] p-3 bg-cWhite ">
+      <div className="hidden md:flex flex-[1] p-3 bg-cWhite ">
         <Links />
       </div>
       <div className="flex-[3]  p-3">

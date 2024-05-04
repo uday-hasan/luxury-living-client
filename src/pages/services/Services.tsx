@@ -1,4 +1,5 @@
 import ButtonShared from "@/components/Button/Button";
+import HELMET from "@/components/shared/HELMET/HELMET";
 import SectionTitle from "@/components/shared/sectionTitle/SectionTitle";
 import useServices from "@/hooks/useServices";
 import { useNavigate } from "react-router-dom";
@@ -16,7 +17,7 @@ const Services = () => {
         {data?.map((service) => (
           <div
             key={service.title}
-            className="flex flex-col items-center justify-center p-6 border gap-4"
+            className="flex flex-col items-center justify-center p-6 border gap-4 shadow-custom"
           >
             <div>
               <img src={service.image} alt="" className="w-[5em]" />
@@ -35,6 +36,7 @@ const Services = () => {
           </div>
         ))}
       </div>
+      <HELMET title="SERVICES" />
     </div>
   );
 };

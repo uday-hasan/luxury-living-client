@@ -1,126 +1,89 @@
-import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import React from "react";
+import {
+  PaymentElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
+import { toast } from "react-toastify";
+import React, { useState } from "react";
 import { useOrder } from "@/contexts/order-context/OrderContext";
 import { useAuth } from "@/contexts/auth-context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import ButtonShared from "../Button/Button";
+import "react-toastify/dist/ReactToastify.css";
+import Loader from "../shared/Loader/Loader";
 
 const CheckOutForm = () => {
+  const { user } = useAuth();
+  const { orders } = useOrder();
   const stripe = useStripe();
   const elements = useElements();
 
-  const [clientSecet, setClientSecret] = React.useState("");
-  const navigate = useNavigate();
-  const { orders } = useOrder();
-  const { user } = useAuth();
-  const sum = orders.reduce((sum, order) => sum + order.price, 0);
+  const [msg, setMsg] = useState<string | undefined>("");
 
-  React.useEffect(() => {
-    const fetchStripe = async () => {
-      const response = await fetch(
-        "http://localhost:5000/checkout/create-payment-intent",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer 126tbadsgy3q7gw`,
-          },
-          body: JSON.stringify({
-            price: sum,
-          }),
-        }
-      );
-      const data = await response.json();
-      setClientSecret(data.clientSecret);
-    };
-    fetchStripe();
-  }, [user, sum, orders]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!stripe || !elements) return;
+    setLoading(true);
 
-    const card = elements.getElement(CardElement);
-    if (card === null) return;
-
-    const { error } = await stripe.createPaymentMethod({
-      type: "card",
-
-      card,
+    const { error, paymentIntent } = await stripe.confirmPayment({
+      elements,
+      confirmParams: {
+        return_url: "http://localhost:5173",
+      },
+      redirect: "if_required",
     });
-    if (error) {
-      console.log("error", error);
-    }
-    const { paymentIntent, error: confirmError } =
-      await stripe.confirmCardPayment(clientSecet, {
-        payment_method: {
-          card,
-          billing_details: {
-            email: user?.email,
+    if (paymentIntent) {
+      fetch(
+        `https://luxury-living-server-o99b.onrender.com/order/${user?._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "content-type": "application/json",
           },
-        },
-      });
-    if (confirmError) {
-      console.log("confirm error", confirmError);
-    } else {
-      if (paymentIntent.id) {
-        const fetchPostOrder = async () => {
-          const response = await fetch(`http://localhost:5000/confirm-order`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              orders,
-              paymentId: paymentIntent.id,
-              userId: user?._id,
-            }),
-          });
-          const res = await response.json();
-          if (res?.success) {
-            const deleteOrder = async () => {
-              const Res = await fetch(
-                `http://localhost:5000/order/${user?._id}`,
-                {
-                  method: "DELETE",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                }
-              );
-              await Res.json();
-            };
-            deleteOrder();
+          body: JSON.stringify({ paymentId: paymentIntent.id }),
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.acknowledged) {
+            navigate("/");
+            toast.success("Successfully purched.", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            });
           }
-        };
-        fetchPostOrder();
-        navigate("/");
-      }
+        });
     }
+    if (error) {
+      setMsg(error.message);
+    }
+    setLoading(false);
   };
   return (
-    <form className="flex flex-col border w-full " onSubmit={handleSubmit}>
-      <CardElement
-        options={{
-          style: {
-            base: {
-              fontSize: "16px",
-              color: "#424770",
-              "::placeholder": {
-                color: "#aab7c4",
-                lineHeight: "5em",
-                padding: "5em",
-              },
-            },
-            invalid: {
-              color: "#9e2146",
-            },
-          },
-        }}
-      />
-      <button type="submit" disabled={!stripe}>
-        Pay
-      </button>
-    </form>
+    <>
+      {loading ? (
+        <Loader />
+      ) : (
+        <form onSubmit={handleSubmit} className="py-10 px-4 space-y-4">
+          <PaymentElement></PaymentElement>
+          {msg && <p className="font-semibold text-cError">{msg}</p>}
+          <ButtonShared
+            title="PAY"
+            type="submit"
+            disabled={orders.length < 1}
+          />
+        </form>
+      )}
+    </>
   );
 };
 

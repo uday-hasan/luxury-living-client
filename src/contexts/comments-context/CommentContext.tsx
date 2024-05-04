@@ -28,6 +28,7 @@ type CommentProviderType = {
   setComments: Dispatch<SetStateAction<CommentType[]>>;
   commentsForUser: CommentType[];
   setCommentsForUser: Dispatch<SetStateAction<CommentType[]>>;
+  getProductComment: (productId: string) => Promise<CommentType | void>;
   deleteComment: (id: string) => Promise<CT | void>;
 };
 
@@ -38,6 +39,7 @@ const CommentProvider = React.createContext<CommentProviderType>({
   setComments: () => {},
   commentsForUser: [],
   setCommentsForUser: () => {},
+  getProductComment: () => Promise.resolve(),
 });
 
 export const useComment = () => React.useContext(CommentProvider);
@@ -45,6 +47,7 @@ export const useComment = () => React.useContext(CommentProvider);
 const CommentContext = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
   const [comments, setComments] = React.useState<CommentType[]>([]);
+
   const [commentsForUser, setCommentsForUser] = React.useState<CommentType[]>(
     []
   );
@@ -67,13 +70,16 @@ const CommentContext = ({ children }: { children: React.ReactNode }) => {
         comment: desc,
         productName,
       };
-      const response = await fetch("http://localhost:5000/comments", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        "https://luxury-living-server-o99b.onrender.com/comments",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
       return (await response.json()) as CT;
     } catch (error) {
       console.log("error", error);
@@ -84,7 +90,9 @@ const CommentContext = ({ children }: { children: React.ReactNode }) => {
   React.useEffect(() => {
     const getAllComments = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/comments`);
+        const response = await fetch(
+          `https://luxury-living-server-o99b.onrender.com/comments`
+        );
         const data = await response.json();
         console.log(data);
         setComments(data.data);
@@ -96,32 +104,54 @@ const CommentContext = ({ children }: { children: React.ReactNode }) => {
     getAllComments();
   }, []);
 
+  // Get product comments
+  const getProductComment = async (productId: string) => {
+    const response = await fetch(
+      `https://luxury-living-server-o99b.onrender.com/comments/${productId}`
+    );
+    const { data } = await response.json();
+    return data;
+  };
+
   // Get all Comment By User
-  React.useEffect(() => {
-    const getAllCommentsByUserEmail = async () => {
-      try {
-        const email = user?.email;
-        console.log(email);
-        const response = await fetch(`http://localhost:5000/comments/${email}`);
-        const data = await response.json();
-        setCommentsForUser(data.data);
-        return data;
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getAllCommentsByUserEmail();
-  }, [user]);
+  // React.useEffect(() => {
+  //   const getAllCommentsByUserEmail = async () => {
+  //     try {
+  //       const email = user?.email;
+  //       const response = await fetch(
+  //         `https://luxury-living-server-o99b.onrender.com/comments/${email}`,
+  //         {
+  //           method: "GET",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             Authorization: `Bearer ${JSON.parse(
+  //               localStorage.getItem("access-token")!
+  //             )}`,
+  //           },
+  //         }
+  //       );
+  //       const data = await response.json();
+  //       setCommentsForUser(data.data);
+  //       return data;
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   getAllCommentsByUserEmail();
+  // }, [user]);
 
   //Delete comment
   const deleteComment = async (id: string): Promise<CT | void> => {
     try {
-      const response = await fetch(`http://localhost:5000/comments/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `https://luxury-living-server-o99b.onrender.com/comments/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       return (await response.json()) as CT;
     } catch (error) {
       console.log(error);
@@ -135,6 +165,7 @@ const CommentContext = ({ children }: { children: React.ReactNode }) => {
     commentsForUser,
     setCommentsForUser,
     deleteComment,
+    getProductComment,
   };
 
   return (

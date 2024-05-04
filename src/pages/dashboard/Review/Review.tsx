@@ -1,4 +1,5 @@
 import ButtonShared from "@/components/Button/Button";
+import HELMET from "@/components/shared/HELMET/HELMET";
 import { useComment } from "@/contexts/comments-context/CommentContext";
 import React from "react";
 
@@ -21,6 +22,7 @@ const Review = () => {
   };
   return (
     <div>
+      <HELMET title="REVIEW" />
       <div>
         <h1 className="text-3xl font-semibold">Your review(s)</h1>
       </div>

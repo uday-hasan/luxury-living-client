@@ -1,22 +1,18 @@
 import ButtonShared from "@/components/Button/Button";
 import SectionTitle from "@/components/shared/sectionTitle/SectionTitle";
+import { serviceType } from "@/types/serviceType";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export interface serviceType {
-  image: string;
-  title: string;
-  price: number;
-  desc: string;
-  _id: string;
-}
 const Services = () => {
   const navigates = useNavigate();
   const navigate = () => navigates("/services");
   const [data, setData] = useState<serviceType[]>([]);
   useEffect(() => {
     const services = async () => {
-      const response = await fetch(`./services.json`);
+      const response = await fetch(
+        `https://luxury-living-server-o99b.onrender.com/services`
+      );
       const res = await response.json();
       setData(res);
     };
@@ -31,7 +27,7 @@ const Services = () => {
         {data.map((service) => (
           <div
             key={service.title}
-            className="flex flex-col items-center justify-center p-6"
+            className="flex flex-col items-center justify-center p-6  shadow-custom"
           >
             <div>
               <img src={service.image} alt="" className="w-[5em]" />

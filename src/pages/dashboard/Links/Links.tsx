@@ -1,4 +1,3 @@
-import React from "react";
 import { NavLink as Link } from "react-router-dom";
 
 const Links = [
@@ -19,7 +18,7 @@ const Links = [
     href: "review",
   },
 ];
-const isActiveLink = ({ isActive }) => {
+const isActiveLink = ({ isActive }: { isActive: boolean }) => {
   return {
     textDecoration: isActive ? "underline" : "none",
   };

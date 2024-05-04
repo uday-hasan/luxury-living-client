@@ -8,6 +8,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { redirect } from "react-router-dom";
+import Loader from "@/components/shared/Loader/Loader";
 
 type userType = {
   name: string;
@@ -44,6 +45,7 @@ const AuthContext = ({ children }: { children: React.ReactNode }) => {
     password: string
   ): Promise<UserCredential | void> => {
     try {
+      setLoading(true);
       return await createUserWithEmailAndPassword(auth, email, password);
     } catch (error) {
       console.log(error);
@@ -64,19 +66,31 @@ const AuthContext = ({ children }: { children: React.ReactNode }) => {
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (User) => {
       try {
+        const token = JSON.parse(localStorage.getItem("access-token")!);
         if (User) {
           const email = User?.email;
-          const U = await fetch(`http://localhost:5000/users/${email}`);
+          const U = await fetch(
+            `https://luxury-living-server-o99b.onrender.com/users/${email}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
           const data = await U.json();
           if (data?.success) {
             setUser(data.data);
           }
         } else {
           setUser(null);
+          // await logOut();
         }
-        setLoading(false);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     });
     return unsubscribe;
@@ -84,14 +98,14 @@ const AuthContext = ({ children }: { children: React.ReactNode }) => {
 
   //Logout
   const logOut = async () => {
+    localStorage.removeItem("access-token");
     await signOut(auth);
     redirect("/login");
   };
   const value = { Register, user, logOut, Login, Loading };
   return (
     <AuthProvider.Provider value={value}>
-      {/* {!Loading && children} */}
-      {children}
+      {Loading ? <Loader /> : children}
     </AuthProvider.Provider>
   );
 };

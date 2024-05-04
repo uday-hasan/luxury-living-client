@@ -1,3 +1,4 @@
+import HELMET from "@/components/shared/HELMET/HELMET";
 import { useAuth } from "@/contexts/auth-context/AuthContext";
 import React from "react";
 
@@ -6,6 +7,7 @@ const Profile = () => {
   const { user } = useAuth();
   return (
     <div>
+      <HELMET title="PROFILE" />
       {edit ? (
         <div></div>
       ) : (

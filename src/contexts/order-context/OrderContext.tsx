@@ -1,13 +1,12 @@
-import { serviceType } from "@/components/Home/services/Services";
+import { serviceType } from "@/types/serviceType";
 import React, { Dispatch, SetStateAction } from "react";
 import { useAuth } from "../auth-context/AuthContext";
 
 type ConfirmOrderType = {
-  _id: string;
-  orders: serviceType[];
-  userId: string;
+  paymentTime: Date;
   paymentId: string;
-  createdAt: Date;
+  productId: string;
+  userId: string;
 };
 type OrderType = {
   orders: serviceType[];
@@ -47,16 +46,19 @@ const OrderContext = ({ children }: { children: React.ReactNode }) => {
   //   Add To Cart
   const addToCart = async (id: string | undefined) => {
     try {
-      const response = await fetch(`http://localhost:5000/order`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          productId: id,
-          userId: user?._id,
-        }),
-      });
+      const response = await fetch(
+        `https://luxury-living-server-o99b.onrender.com/order`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            productId: id,
+            userId: user?._id,
+          }),
+        }
+      );
       const data = await response.json();
       if (data?.success) {
         const a = [...orders, data.data];
@@ -76,7 +78,7 @@ const OrderContext = ({ children }: { children: React.ReactNode }) => {
   //   Delete Order
   async function Delete(productId: string | undefined) {
     const response = await fetch(
-      `http://localhost:5000/order/${user?._id}/${productId}`,
+      `https://luxury-living-server-o99b.onrender.com/order/${user?._id}/${productId}`,
       {
         method: "DELETE",
       }
@@ -92,24 +94,26 @@ const OrderContext = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
-  //   Get All Orders
+  //   Get All Unpaid Orders
   React.useEffect(() => {
     const getOrders = async () => {
-      const response = await fetch(`http://localhost:5000/order/${user?._id}`);
+      const response = await fetch(
+        `https://luxury-living-server-o99b.onrender.com/order/pending/${user?._id}`
+      );
       const data = await response.json();
       setOrders(data.data);
     };
     getOrders();
   }, [user?._id]);
 
-  // Get order which is confirmed by payment
+  // Get All Paid Order
   React.useEffect(() => {
     const getOrders = async () => {
       const response = await fetch(
-        `http://localhost:5000/confirm-order/${user?._id}`
+        `https://luxury-living-server-o99b.onrender.com/order/done/${user?._id}`
       );
-      const data = await response.json();
-      setConfirmOrders(data.data);
+      const { orders } = await response.json();
+      setConfirmOrders(orders);
     };
     getOrders();
   }, [user?._id]);

@@ -1,4 +1,3 @@
-import { NavigationMenuItem, NavigationMenuLink } from "../ui/navigation-menu";
 import { NavLink as Link } from "react-router-dom";
 
 type routerType = {
@@ -14,11 +13,9 @@ const activeLink = ({ isActive }: { isActive: boolean }) => {
 };
 const NavLink = ({ item }: { item: routerType }) => {
   return (
-    <NavigationMenuItem className="flex gap-8">
-      <Link to={item.path} style={activeLink}>
-        <NavigationMenuLink> {item.title}</NavigationMenuLink>
-      </Link>
-    </NavigationMenuItem>
+    <Link to={item.path} style={activeLink}>
+      {item.title}
+    </Link>
   );
 };
 

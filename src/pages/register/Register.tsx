@@ -1,4 +1,5 @@
 import ButtonShared from "@/components/Button/Button";
+import HELMET from "@/components/shared/HELMET/HELMET";
 import { AuthProvider } from "@/contexts/auth-context/AuthContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
@@ -30,10 +31,12 @@ const Register = () => {
         return;
       }
       const { name, email, password } = isValidProps.data;
-      const data = await fetch(`http://localhost:5000/users/${email}`);
+      const data = await fetch(
+        `https://luxury-living-server-o99b.onrender.com/users/${email}`
+      );
       const exist = await data.json();
       if (!exist.success) {
-        await fetch(`http://localhost:5000/users`, {
+        await fetch(`https://luxury-living-server-o99b.onrender.com/users`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -55,6 +58,7 @@ const Register = () => {
       className=" flex flex-col items-center justify-center  "
       onSubmit={handleSubmit(onSubmit)}
     >
+      <HELMET title="REGISTER" />
       <div className="border px-6 py-3 flex flex-col gap-4 my-4">
         <div className="flex flex-col gap-2 font-semibold">
           <label htmlFor="name">Your Name</label>

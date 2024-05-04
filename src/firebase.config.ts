@@ -6,12 +6,12 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAjW4rRGcShGvG-Jc0wPV1PAbEgGh0VNUc",
-  authDomain: "millennium-560f9.firebaseapp.com",
-  projectId: "millennium-560f9",
-  storageBucket: "millennium-560f9.appspot.com",
-  messagingSenderId: "95516747955",
-  appId: "1:95516747955:web:cfacfa4a46cd57704ba8c6",
+  apiKey: "AIzaSyBvay7SdtDlBiYj_3o1xOi3nGszXUrA6ug",
+  authDomain: "luxury-living-uday-hasan.firebaseapp.com",
+  projectId: "luxury-living-uday-hasan",
+  storageBucket: "luxury-living-uday-hasan.appspot.com",
+  messagingSenderId: "252261386809",
+  appId: "1:252261386809:web:1e1737d8a369b7c5b35be8",
 };
 
 // Initialize Firebase
