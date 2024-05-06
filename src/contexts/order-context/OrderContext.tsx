@@ -104,7 +104,7 @@ const OrderContext = ({ children }: { children: React.ReactNode }) => {
       setOrders(data.data);
     };
     getOrders();
-  }, [user?._id]);
+  }, [user?._id, orders]);
 
   // Get All Paid Order
   React.useEffect(() => {
@@ -116,7 +116,7 @@ const OrderContext = ({ children }: { children: React.ReactNode }) => {
       setConfirmOrders(orders);
     };
     getOrders();
-  }, [user?._id]);
+  }, [user?._id, confirmOrders]);
 
   return (
     <orderProvider.Provider

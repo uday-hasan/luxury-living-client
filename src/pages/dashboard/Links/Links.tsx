@@ -13,10 +13,10 @@ const Links = [
     title: "Order History",
     href: "order-history",
   },
-  {
-    title: "Review",
-    href: "review",
-  },
+  // {
+  //   title: "Review",
+  //   href: "review",
+  // },
 ];
 const isActiveLink = ({ isActive }: { isActive: boolean }) => {
   return {

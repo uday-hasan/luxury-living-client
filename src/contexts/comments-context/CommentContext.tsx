@@ -94,7 +94,6 @@ const CommentContext = ({ children }: { children: React.ReactNode }) => {
           `https://luxury-living-server-o99b.onrender.com/comments`
         );
         const data = await response.json();
-        console.log(data);
         setComments(data.data);
         return data;
       } catch (error) {
@@ -102,7 +101,7 @@ const CommentContext = ({ children }: { children: React.ReactNode }) => {
       }
     };
     getAllComments();
-  }, []);
+  }, [comments]);
 
   // Get product comments
   const getProductComment = async (productId: string) => {

@@ -23,6 +23,7 @@ const CommentForm = ({
     const data = await addComment(userComment, productId!, serviceName!);
     if (data?.success) setMessage({ success: true, message: data?.message });
     else setMessage({ success: false, message: data?.message });
+    (e.target as HTMLFormElement).comments.value = "";
   };
   return (
     <div className="px-4 py-2 flex flex-col gap-3 ">
