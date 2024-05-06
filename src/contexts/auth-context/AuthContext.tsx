@@ -1,4 +1,9 @@
-import React, { createContext, useContext } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useContext,
+} from "react";
 import { auth } from "@/firebase.config";
 import {
   UserCredential,
@@ -23,6 +28,7 @@ interface authContectType {
   Login: (email: string, password: string) => Promise<UserCredential | void>;
   logOut: () => void;
   Loading: boolean;
+  setLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 export const AuthProvider = createContext<authContectType>({
@@ -31,6 +37,7 @@ export const AuthProvider = createContext<authContectType>({
   Login: () => Promise.resolve(),
   logOut: () => null,
   Loading: true,
+  setLoading: () => {},
 });
 
 export const useAuth = () => useContext(AuthProvider);
@@ -46,6 +53,7 @@ const AuthContext = ({ children }: { children: React.ReactNode }) => {
   ): Promise<UserCredential | void> => {
     try {
       setLoading(true);
+      console.log("register");
       return await createUserWithEmailAndPassword(auth, email, password);
     } catch (error) {
       console.log(error);
@@ -56,6 +64,7 @@ const AuthContext = ({ children }: { children: React.ReactNode }) => {
   const Login = async (email: string, password: string) => {
     try {
       setLoading(true);
+      console.log("login");
       return await signInWithEmailAndPassword(auth, email, password);
     } catch (error) {
       console.log(error);
@@ -69,16 +78,13 @@ const AuthContext = ({ children }: { children: React.ReactNode }) => {
         const token = JSON.parse(localStorage.getItem("access-token")!);
         if (User) {
           const email = User?.email;
-          const U = await fetch(
-            `https://luxury-living-server-o99b.onrender.com/users/${email}`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
+          const U = await fetch(`http://localhost:5000/users/${email}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
           const data = await U.json();
           if (data?.success) {
             setUser(data.data);
@@ -102,7 +108,7 @@ const AuthContext = ({ children }: { children: React.ReactNode }) => {
     await signOut(auth);
     redirect("/login");
   };
-  const value = { Register, user, logOut, Login, Loading };
+  const value = { Register, user, logOut, Login, Loading, setLoading };
   return (
     <AuthProvider.Provider value={value}>
       {Loading ? <Loader /> : children}

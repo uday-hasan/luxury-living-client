@@ -12,9 +12,7 @@ const useService = (id: string) => {
   React.useEffect(
     function () {
       async function getService() {
-        const response = await fetch(
-          `https://luxury-living-server-o99b.onrender.com/services/${id}`
-        );
+        const response = await fetch(`http://localhost:5000/services/${id}`);
         const data = await response.json();
         setService(data);
       }

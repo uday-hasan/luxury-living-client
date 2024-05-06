@@ -25,7 +25,7 @@ const Login = () => {
   } = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
   });
-  const { Login, Loading } = React.useContext(AuthProvider);
+  const { Login, Loading, setLoading } = React.useContext(AuthProvider);
   const onSubmit = async (values: z.infer<typeof loginSchema>) => {
     try {
       const isValidProps = loginSchema.safeParse(values);
@@ -34,16 +34,13 @@ const Login = () => {
         return;
       }
       const { email, password } = isValidProps.data;
-      const data = await fetch(
-        `https://luxury-living-server-o99b.onrender.com/users/login/${email}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ password }),
-        }
-      );
+      const data = await fetch(`http://localhost:5000/users/login/${email}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password }),
+      });
       const exist = await data.json();
       if (exist.success) {
         await Login(email, password);
@@ -54,6 +51,8 @@ const Login = () => {
       }
     } catch (err) {
       console.log(err + "Login page");
+    } finally {
+      setLoading(false);
     }
   };
   return (

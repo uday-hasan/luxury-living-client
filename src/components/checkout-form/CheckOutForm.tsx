@@ -10,7 +10,6 @@ import { useAuth } from "@/contexts/auth-context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import ButtonShared from "../Button/Button";
 import "react-toastify/dist/ReactToastify.css";
-import Loader from "../shared/Loader/Loader";
 
 const CheckOutForm = () => {
   const { user } = useAuth();
@@ -28,61 +27,60 @@ const CheckOutForm = () => {
     if (!stripe || !elements) return;
     setLoading(true);
 
-    const { error, paymentIntent } = await stripe.confirmPayment({
-      elements,
-      confirmParams: {
-        return_url: "http://localhost:5173",
-      },
-      redirect: "if_required",
-    });
-    if (paymentIntent) {
-      fetch(
-        `https://luxury-living-server-o99b.onrender.com/order/${user?._id}`,
-        {
+    try {
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements,
+        confirmParams: {
+          return_url: "http://localhost:5173",
+        },
+        redirect: "if_required",
+      });
+      if (paymentIntent) {
+        fetch(`http://localhost:5000/order/${user?._id}`, {
           method: "PUT",
           headers: {
             "content-type": "application/json",
           },
           body: JSON.stringify({ paymentId: paymentIntent.id }),
-        }
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.acknowledged) {
-            navigate("/");
-            toast.success("Successfully purched.", {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "dark",
-            });
-          }
-        });
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.acknowledged) {
+              navigate("/");
+              toast.success("Successfully purched.", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+              });
+            }
+          });
+      }
+      if (error) {
+        setMsg(error.message);
+      }
+    } catch (err) {
+      console.log(err);
+      setMsg("Error confirming payment, try later.");
+    } finally {
+      setLoading(false);
     }
-    if (error) {
-      setMsg(error.message);
-    }
-    setLoading(false);
   };
   return (
     <>
-      {loading ? (
-        <Loader />
-      ) : (
-        <form onSubmit={handleSubmit} className="py-10 px-4 space-y-4">
-          <PaymentElement></PaymentElement>
-          {msg && <p className="font-semibold text-cError">{msg}</p>}
-          <ButtonShared
-            title="PAY"
-            type="submit"
-            disabled={orders.length < 1}
-          />
-        </form>
-      )}
+      <form onSubmit={handleSubmit} className="py-10 px-4 space-y-4">
+        <PaymentElement></PaymentElement>
+        {msg && <p className="font-semibold text-cError">{msg}</p>}
+        <ButtonShared
+          title="PAY"
+          type="submit"
+          disabled={orders.length < 1 || loading}
+        />
+      </form>
     </>
   );
 };

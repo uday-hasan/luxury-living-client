@@ -1,48 +1,45 @@
-import CheckOutForm from "@/components/checkout-form/CheckOutForm";
+import Loader from "@/components/shared/Loader/Loader";
+import { useState, useEffect } from "react";
+import CheckoutItems from "./CheckoutItems";
 import { Elements } from "@stripe/react-stripe-js";
 import { Stripe, loadStripe } from "@stripe/stripe-js";
-import { useEffect, useState } from "react";
-import CheckoutItems from "./CheckoutItems";
 import { useOrder } from "@/contexts/order-context/OrderContext";
-import Loader from "@/components/shared/Loader/Loader";
+import CheckOutForm from "@/components/checkout-form/CheckOutForm";
 const Checkout = () => {
   const { orders } = useOrder();
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState(false);
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null>>(
     () => Promise.resolve(null)
   );
-  useEffect(() => {
-    setStripePromise(loadStripe(import.meta.env.VITE_STRIPE_PUBLIC));
-  }, []);
+  const [clientSecret, setClientSecret] = useState(null);
 
   useEffect(() => {
     setLoading(true);
-    fetch(`https://luxury-living-server-o99b.onrender.com/payment/config`)
+    fetch("http://localhost:5000/payment/config")
       .then((res) => res.json())
       .then((data) => {
-        const { publishableKey } = data;
-        setStripePromise(loadStripe(publishableKey));
+        const { publishableKey: pub } = data;
+        setStripePromise(loadStripe(pub));
       });
   }, []);
+
   useEffect(() => {
-    const sum = orders.reduce((s, order) => s + order.price, 0);
-    fetch(
-      `https://luxury-living-server-o99b.onrender.com/payment/create-payment-intent`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ price: sum }),
-      }
-    )
+    fetch(`http://localhost:5000/payment/create-payment-intent`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        orders,
+      }),
+    })
       .then((res) => res.json())
       .then((data) => {
-        setClientSecret(data?.clientSecret);
+        setClientSecret(data.clientSecret);
         setLoading(false);
       });
   }, []);
+
   return (
     <>
       {loading ? (
@@ -60,6 +57,11 @@ const Checkout = () => {
                 <CheckOutForm />
               </Elements>
             )}
+            {/* {clientSecret && (
+              <Elements stripe={stripePromise} options={{ clientSecret }}>
+                <CheckOutForm />
+              </Elements>
+            )} */}
           </div>
         </div>
       )}

@@ -10,9 +10,7 @@ const Services = () => {
   const [data, setData] = useState<serviceType[]>([]);
   useEffect(() => {
     const services = async () => {
-      const response = await fetch(
-        `https://luxury-living-server-o99b.onrender.com/services`
-      );
+      const response = await fetch(`http://localhost:5000/services`);
       const res = await response.json();
       setData(res);
     };
