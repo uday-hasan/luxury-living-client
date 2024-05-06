@@ -31,10 +31,12 @@ const Register = () => {
         return;
       }
       const { name, email, password } = isValidProps.data;
-      const data = await fetch(`http://localhost:5000/users/${email}`);
+      const data = await fetch(
+        `https://luxury-living-server-o99b.onrender.com/users/${email}`
+      );
       const exist = await data.json();
       if (!exist.success) {
-        await fetch(`http://localhost:5000/users`, {
+        await fetch(`https://luxury-living-server-o99b.onrender.com/users`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

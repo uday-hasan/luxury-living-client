@@ -46,16 +46,19 @@ const OrderContext = ({ children }: { children: React.ReactNode }) => {
   //   Add To Cart
   const addToCart = async (id: string | undefined) => {
     try {
-      const response = await fetch(`http://localhost:5000/order`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          productId: id,
-          userId: user?._id,
-        }),
-      });
+      const response = await fetch(
+        `https://luxury-living-server-o99b.onrender.com/order`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            productId: id,
+            userId: user?._id,
+          }),
+        }
+      );
       const data = await response.json();
       if (data?.success) {
         const a = [...orders, data.data];
@@ -75,7 +78,7 @@ const OrderContext = ({ children }: { children: React.ReactNode }) => {
   //   Delete Order
   async function Delete(productId: string | undefined) {
     const response = await fetch(
-      `http://localhost:5000/order/${user?._id}/${productId}`,
+      `https://luxury-living-server-o99b.onrender.com/order/${user?._id}/${productId}`,
       {
         method: "DELETE",
       }
@@ -95,7 +98,7 @@ const OrderContext = ({ children }: { children: React.ReactNode }) => {
   React.useEffect(() => {
     const getOrders = async () => {
       const response = await fetch(
-        `http://localhost:5000/order/pending/${user?._id}`
+        `https://luxury-living-server-o99b.onrender.com/order/pending/${user?._id}`
       );
       const data = await response.json();
       setOrders(data.data);
@@ -107,7 +110,7 @@ const OrderContext = ({ children }: { children: React.ReactNode }) => {
   React.useEffect(() => {
     const getOrders = async () => {
       const response = await fetch(
-        `http://localhost:5000/order/done/${user?._id}`
+        `https://luxury-living-server-o99b.onrender.com/order/done/${user?._id}`
       );
       const { orders } = await response.json();
       setConfirmOrders(orders);

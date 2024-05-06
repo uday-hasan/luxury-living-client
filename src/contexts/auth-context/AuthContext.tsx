@@ -78,13 +78,16 @@ const AuthContext = ({ children }: { children: React.ReactNode }) => {
         const token = JSON.parse(localStorage.getItem("access-token")!);
         if (User) {
           const email = User?.email;
-          const U = await fetch(`http://localhost:5000/users/${email}`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          const U = await fetch(
+            `https://luxury-living-server-o99b.onrender.com/users/${email}`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
           const data = await U.json();
           if (data?.success) {
             setUser(data.data);

@@ -15,7 +15,7 @@ const Checkout = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch("http://localhost:5000/payment/config")
+    fetch("https://luxury-living-server-o99b.onrender.com/payment/config")
       .then((res) => res.json())
       .then((data) => {
         const { publishableKey: pub } = data;
@@ -24,15 +24,18 @@ const Checkout = () => {
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/payment/create-payment-intent`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        orders,
-      }),
-    })
+    fetch(
+      `https://luxury-living-server-o99b.onrender.com/payment/create-payment-intent`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          orders,
+        }),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         setClientSecret(data.clientSecret);

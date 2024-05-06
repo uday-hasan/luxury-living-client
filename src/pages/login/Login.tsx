@@ -34,13 +34,16 @@ const Login = () => {
         return;
       }
       const { email, password } = isValidProps.data;
-      const data = await fetch(`http://localhost:5000/users/login/${email}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ password }),
-      });
+      const data = await fetch(
+        `https://luxury-living-server-o99b.onrender.com/users/login/${email}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ password }),
+        }
+      );
       const exist = await data.json();
       if (exist.success) {
         await Login(email, password);
