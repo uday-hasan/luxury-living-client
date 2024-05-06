@@ -27,7 +27,7 @@ const isActiveLink = ({ isActive }: { isActive: boolean }) => {
 const DashBoardLinks = () => {
   return (
     <div className="flex flex-col gap-3  bg-cWhite">
-      {Links.map((link, index) => (
+      {Links?.map((link, index) => (
         <Link
           style={isActiveLink}
           className={`text-xl font-semibold text-cBlue`}

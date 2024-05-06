@@ -24,7 +24,7 @@ const Services = () => {
         <SectionTitle title="We're an agency tailored to all client's needs that always delivers" />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {data.map((service) => (
+        {data?.map((service) => (
           <div
             key={service.title}
             className="flex flex-col items-center justify-center p-6  shadow-custom"

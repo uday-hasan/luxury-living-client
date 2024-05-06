@@ -13,7 +13,7 @@ const Review = () => {
     const res = await deleteComment(id);
     if (res?.success) {
       setCommentsForUser(
-        commentsForUser.filter((comment) => comment._id !== id)
+        commentsForUser?.filter((comment) => comment._id !== id)
       );
       setMsg({ success: true, message: res?.message });
     } else {
@@ -36,7 +36,7 @@ const Review = () => {
       <div>
         {commentsForUser?.length ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {commentsForUser.map((comment) => {
+            {commentsForUser?.map((comment) => {
               return (
                 <div
                   key={comment?._id}

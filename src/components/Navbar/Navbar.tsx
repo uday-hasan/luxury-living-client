@@ -59,7 +59,7 @@ const Navbar = () => {
         <img src={NavIcon} className="w-36" />
       </div>
       <ul className="hidden md:flex gap-4">
-        {routes.map((route) => (
+        {routes?.map((route) => (
           <li className="text-xl font-semibold key={route.path} ">
             <NavLink item={route} />
           </li>
@@ -93,7 +93,7 @@ const Navbar = () => {
               />
             </button>
           </div>
-          {routes.map((route) => (
+          {routes?.map((route) => (
             <NavLink item={route} key={route.path} />
           ))}
 

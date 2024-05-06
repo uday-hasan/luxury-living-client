@@ -9,7 +9,7 @@ const Comments = ({ productId }: { productId?: string }) => {
     <div className="px-4">
       <h1 className="text-3xl">Review(s)</h1>
       <div>
-        {productComments.map((comment) => {
+        {productComments?.map((comment) => {
           const time = new Date(comment.createdAt);
           console.log(time);
           return (

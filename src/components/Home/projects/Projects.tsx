@@ -33,7 +33,7 @@ const Projects = () => {
         <SectionTitle title="Discover the latest Interior Design available today" />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6  ">
-        {projects.map((project) => (
+        {projects?.map((project) => (
           <div
             key={project.name}
             className="w-full flex flex-col justify-center items-center p-[0.4em] shadow-custom rounded-xl"

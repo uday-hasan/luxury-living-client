@@ -85,7 +85,7 @@ const OrderContext = ({ children }: { children: React.ReactNode }) => {
     );
     const result = await response.json();
     if (result.success) {
-      const a = orders.filter((item) => item._id !== productId);
+      const a = orders?.filter((item) => item._id !== productId);
       setOrders(a);
       setMessage({
         type: "success",

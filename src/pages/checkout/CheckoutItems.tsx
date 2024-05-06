@@ -7,7 +7,7 @@ const CheckoutItems = () => {
   return (
     <div className="flex flex-col items-center gap-4 py-4">
       <div>
-        {orders.map((order) => (
+        {orders?.map((order) => (
           <div
             key={order._id}
             className="flex items-center justify-between gap-4"
