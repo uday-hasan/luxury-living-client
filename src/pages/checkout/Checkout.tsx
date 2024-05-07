@@ -18,7 +18,7 @@ const Checkout = () => {
     setLoading(true);
     async function stripePublishableKey() {
       const res = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/payment/config`
+        `https://luxury-living-server-o99b.onrender.com/payment/config`
       );
       const data = await res.json();
       setStripePromise(loadStripe(data.publishableKey));
@@ -29,7 +29,7 @@ const Checkout = () => {
   useEffect(() => {
     async function stripePayment() {
       const res = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/payment/create-payment-intent`,
+        `https://luxury-living-server-o99b.onrender.com/payment/create-payment-intent`,
         {
           method: "POST",
           headers: {

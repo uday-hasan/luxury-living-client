@@ -15,7 +15,7 @@ const usePaidOrder = () => {
   React.useEffect(() => {
     const getOrders = async () => {
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/order/done/${user?._id}`,
+        `https://luxury-living-server-o99b.onrender.com/order/done/${user?._id}`,
         {
           method: "GET",
           headers: {

@@ -36,13 +36,16 @@ const CheckOutForm = () => {
         redirect: "if_required",
       });
       if (paymentIntent) {
-        fetch(`${import.meta.env.VITE_SERVER_URL}/order/${user?._id}`, {
-          method: "PUT",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({ paymentId: paymentIntent.id }),
-        })
+        fetch(
+          `https://luxury-living-server-o99b.onrender.com/order/${user?._id}`,
+          {
+            method: "PUT",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify({ paymentId: paymentIntent.id }),
+          }
+        )
           .then((res) => res.json())
           .then((data) => {
             if (data.acknowledged) {

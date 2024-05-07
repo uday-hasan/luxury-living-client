@@ -3,7 +3,7 @@ async function Delete(
   userId: string | undefined
 ) {
   const response = await fetch(
-    `${import.meta.env.VITE_SERVER_URL}/order/${userId}/${productId}`,
+    `https://luxury-living-server-o99b.onrender.com/order/${userId}/${productId}`,
     {
       method: "DELETE",
     }

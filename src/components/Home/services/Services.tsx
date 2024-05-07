@@ -11,7 +11,7 @@ const Services = () => {
   useEffect(() => {
     const services = async () => {
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/services`
+        `https://luxury-living-server-o99b.onrender.com/services`
       );
       const res = await response.json();
       setData(res);

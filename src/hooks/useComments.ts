@@ -44,7 +44,7 @@ const useComments = () => {
         productName,
       };
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/comments`,
+        `https://luxury-living-server-o99b.onrender.com/comments`,
         {
           method: "POST",
           headers: {
@@ -64,7 +64,7 @@ const useComments = () => {
     const getAllComments = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}/comments`
+          `https://luxury-living-server-o99b.onrender.com/comments`
         );
         const data = await response.json();
         setComments(data.data);
@@ -79,7 +79,7 @@ const useComments = () => {
   // Get product comments
   const getProductComment = async (productId: string) => {
     const response = await fetch(
-      `${import.meta.env.VITE_SERVER_URL}/comments/productcomment/${productId}`
+      `https://luxury-living-server-o99b.onrender.com/comments/productcomment/${productId}`
     );
     const { data } = await response.json();
     return data;
@@ -91,7 +91,7 @@ const useComments = () => {
       try {
         const email = user?.email;
         const response = await fetch(
-          `${import.meta.env.VITE_SERVER_URL}/comments/usercomment/${email}`
+          `https://luxury-living-server-o99b.onrender.com/comments/usercomment/${email}`
         );
         const data = await response.json();
         setCommentsForUser(data.data);
@@ -107,7 +107,7 @@ const useComments = () => {
   const deleteComment = async (id: string): Promise<CT | void> => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/comments/${id}`,
+        `https://luxury-living-server-o99b.onrender.com/comments/${id}`,
         {
           method: "DELETE",
           headers: {

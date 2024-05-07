@@ -32,11 +32,11 @@ const Register = () => {
       }
       const { name, email, password } = isValidProps.data;
       const data = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/users/${email}`
+        `https://luxury-living-server-o99b.onrender.com/users/${email}`
       );
       const exist = await data.json();
       if (!exist.success) {
-        await fetch(`${import.meta.env.VITE_SERVER_URL}/users`, {
+        await fetch(`https://luxury-living-server-o99b.onrender.com/users`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

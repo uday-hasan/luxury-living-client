@@ -13,16 +13,19 @@ const addCart = () => {
   //   Add To Cart
   const addToCart = async (id: string | undefined) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_SERVER_URL}/order`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          productId: id,
-          userId: user?._id,
-        }),
-      });
+      const response = await fetch(
+        `https://luxury-living-server-o99b.onrender.com/order`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            productId: id,
+            userId: user?._id,
+          }),
+        }
+      );
       const data = await response.json();
       if (data?.success) {
         const a = [...orders, data.data];

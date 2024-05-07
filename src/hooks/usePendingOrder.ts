@@ -11,7 +11,7 @@ const usePendingOrder = () => {
     const getOrders = async () => {
       setLoading(true);
       const response = await fetch(
-        `${import.meta.env.VITE_SERVER_URL}/order/pending/${user?._id}`,
+        `https://luxury-living-server-o99b.onrender.com/order/pending/${user?._id}`,
         {
           method: "GET",
           headers: {
