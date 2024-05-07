@@ -18,14 +18,12 @@ import ProtectedUserRoute from "./private-route/ProtectedUserRoute.tsx";
 import Services from "./pages/services/Services.tsx";
 import SingleService from "./pages/services/SingleService.tsx";
 import { getServices } from "./actions/services/getAllServices.tsx";
-import OrderContext from "./contexts/order-context/OrderContext.tsx";
 import Checkout from "./pages/checkout/Checkout.tsx";
 import Profile from "./pages/dashboard/Profile/Profile.tsx";
 import OrderHistory from "./pages/dashboard/Order-history/OrderHistory.tsx";
 import Review from "./pages/dashboard/Review/Review.tsx";
 import DashboardLayout from "./layouts/DashboardLayout.tsx";
 import Cart from "./components/cart/Cart.tsx";
-import CommentContext from "./contexts/comments-context/CommentContext.tsx";
 
 const router = createBrowserRouter([
   {
@@ -111,11 +109,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AuthContext>
-      <OrderContext>
-        <CommentContext>
-          <RouterProvider router={router} />
-        </CommentContext>
-      </OrderContext>
+      <RouterProvider router={router} />
     </AuthContext>
   </React.StrictMode>
 );

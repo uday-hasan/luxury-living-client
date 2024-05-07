@@ -13,7 +13,7 @@ const useService = (id: string) => {
     function () {
       async function getService() {
         const response = await fetch(
-          `https://luxury-living-server-o99b.onrender.com/services/${id}`
+          `${import.meta.env.VITE_SERVER_URL}/services/${id}`
         );
         const data = await response.json();
         setService(data);

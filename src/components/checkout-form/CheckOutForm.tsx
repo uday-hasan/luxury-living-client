@@ -5,7 +5,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { toast } from "react-toastify";
 import React, { useState } from "react";
-import { useOrder } from "@/contexts/order-context/OrderContext";
+import usePendingOrder from "@/hooks/usePendingOrder";
 import { useAuth } from "@/contexts/auth-context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import ButtonShared from "../Button/Button";
@@ -13,7 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const CheckOutForm = () => {
   const { user } = useAuth();
-  const { orders } = useOrder();
+  const { orders, loading: isLoading } = usePendingOrder();
   const stripe = useStripe();
   const elements = useElements();
 
@@ -36,16 +36,13 @@ const CheckOutForm = () => {
         redirect: "if_required",
       });
       if (paymentIntent) {
-        fetch(
-          `https://luxury-living-server-o99b.onrender.com/order/${user?._id}`,
-          {
-            method: "PUT",
-            headers: {
-              "content-type": "application/json",
-            },
-            body: JSON.stringify({ paymentId: paymentIntent.id }),
-          }
-        )
+        fetch(`${import.meta.env.VITE_SERVER_URL}/order/${user?._id}`, {
+          method: "PUT",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({ paymentId: paymentIntent.id }),
+        })
           .then((res) => res.json())
           .then((data) => {
             if (data.acknowledged) {
@@ -81,7 +78,7 @@ const CheckOutForm = () => {
         <ButtonShared
           title="PAY"
           type="submit"
-          disabled={orders.length < 1 || loading}
+          disabled={orders?.length < 1 || loading || isLoading}
         />
       </form>
     </>

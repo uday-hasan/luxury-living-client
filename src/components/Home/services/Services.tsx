@@ -11,7 +11,7 @@ const Services = () => {
   useEffect(() => {
     const services = async () => {
       const response = await fetch(
-        `https://luxury-living-server-o99b.onrender.com/services`
+        `${import.meta.env.VITE_SERVER_URL}/services`
       );
       const res = await response.json();
       setData(res);
@@ -40,7 +40,7 @@ const Services = () => {
           </div>
         ))}
       </div>
-      <div>
+      <div className="my-3">
         <ButtonShared title="Explore More" onclick={navigate} />
       </div>
     </div>

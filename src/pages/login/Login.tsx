@@ -35,7 +35,7 @@ const Login = () => {
       }
       const { email, password } = isValidProps.data;
       const data = await fetch(
-        `https://luxury-living-server-o99b.onrender.com/users/login/${email}`,
+        `${import.meta.env.VITE_SERVER_URL}/users/login/${email}`,
         {
           method: "POST",
           headers: {

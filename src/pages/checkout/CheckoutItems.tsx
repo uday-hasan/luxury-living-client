@@ -1,8 +1,7 @@
-import { useOrder } from "@/contexts/order-context/OrderContext";
+import usePendingOrder from "@/hooks/usePendingOrder";
 
 const CheckoutItems = () => {
-  const { orders } = useOrder();
-  console.log(orders);
+  const { orders } = usePendingOrder();
   const sum = orders.reduce((total, order) => total + order.price, 0);
   return (
     <div className="flex flex-col items-center gap-4 py-4">

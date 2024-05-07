@@ -1,15 +1,15 @@
 import ButtonShared from "@/components/Button/Button";
-import { useOrder } from "@/contexts/order-context/OrderContext";
 import useService from "@/hooks/useService";
 import { useNavigate, useParams } from "react-router-dom";
 import CommentForm from "./CommentForm";
 import HELMET from "@/components/shared/HELMET/HELMET";
 import Comments from "./Comments";
+import addCart from "@/actions/cart/addCart";
 
 const SingleService = () => {
   const { id } = useParams();
   const { service } = useService(id!);
-  const { addToCart, message, setMessage } = useOrder();
+  const { addToCart, message, setMessage } = addCart();
   const navigate = useNavigate();
   const Navigate = () => navigate("/dashboard/cart");
 

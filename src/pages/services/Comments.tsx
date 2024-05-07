@@ -1,7 +1,7 @@
-import { useComment } from "@/contexts/comments-context/CommentContext";
+import useComments from "@/hooks/useComments";
 
 const Comments = ({ productId }: { productId?: string }) => {
-  const { comments } = useComment();
+  const { comments } = useComments();
   const productComments = comments?.filter(
     (comment) => comment.productId === productId
   );

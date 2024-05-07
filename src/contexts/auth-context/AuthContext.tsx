@@ -79,7 +79,7 @@ const AuthContext = ({ children }: { children: React.ReactNode }) => {
         if (User) {
           const email = User?.email;
           const U = await fetch(
-            `https://luxury-living-server-o99b.onrender.com/users/${email}`,
+            `${import.meta.env.VITE_SERVER_URL}/users/${email}`,
             {
               method: "GET",
               headers: {

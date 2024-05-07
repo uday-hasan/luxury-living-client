@@ -6,7 +6,7 @@ const useServices = () => {
   React.useEffect(() => {
     async function getServices() {
       const response = await fetch(
-        "https://luxury-living-server-o99b.onrender.com/services"
+        `${import.meta.env.VITE_SERVER_URL}/services`
       );
       const data = await response.json();
       setServices(data);

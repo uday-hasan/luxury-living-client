@@ -60,7 +60,10 @@ const Navbar = () => {
       </div>
       <ul className="hidden md:flex gap-4">
         {routes?.map((route) => (
-          <li className="text-xl font-semibold key={route.path} ">
+          <li
+            className="text-xl font-semibold key={route.path} "
+            key={route.path}
+          >
             <NavLink item={route} />
           </li>
         ))}
@@ -128,6 +131,11 @@ const Navbar = () => {
                 }}
               />
             </>
+          )}
+          {user && (
+            <div className="border flex justify-center items-center">
+              <ButtonShared title="LOGOUT" onclick={logOut} />
+            </div>
           )}
         </div>
       </div>

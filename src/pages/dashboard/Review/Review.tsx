@@ -1,10 +1,10 @@
 import ButtonShared from "@/components/Button/Button";
 import HELMET from "@/components/shared/HELMET/HELMET";
-import { useComment } from "@/contexts/comments-context/CommentContext";
+import useComments from "@/hooks/useComments";
 import React from "react";
 
 const Review = () => {
-  const { commentsForUser, setCommentsForUser, deleteComment } = useComment();
+  const { commentsForUser, setCommentsForUser, deleteComment } = useComments();
   const [msg, setMsg] = React.useState<{ success: boolean; message: string }>({
     message: "",
     success: true,

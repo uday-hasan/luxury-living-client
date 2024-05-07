@@ -1,47 +1,51 @@
-import Loader from "@/components/shared/Loader/Loader";
 import { useState, useEffect } from "react";
 import CheckoutItems from "./CheckoutItems";
 import { Elements } from "@stripe/react-stripe-js";
 import { Stripe, loadStripe } from "@stripe/stripe-js";
-import { useOrder } from "@/contexts/order-context/OrderContext";
 import CheckOutForm from "@/components/checkout-form/CheckOutForm";
+import usePendingOrder from "@/hooks/usePendingOrder";
+import Loader from "@/components/shared/Loader/Loader";
 const Checkout = () => {
-  const { orders } = useOrder();
+  const { orders, loading: isLoading } = usePendingOrder();
+  console.log(orders);
   const [loading, setLoading] = useState(false);
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null>>(
     () => Promise.resolve(null)
   );
-  const [clientSecret, setClientSecret] = useState(null);
+  const [clientSecret, setClientSecret] = useState("");
 
   useEffect(() => {
     setLoading(true);
-    fetch("https://luxury-living-server-o99b.onrender.com/payment/config")
-      .then((res) => res.json())
-      .then((data) => {
-        const { publishableKey: pub } = data;
-        setStripePromise(loadStripe(pub));
-      });
+    async function stripePublishableKey() {
+      const res = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/payment/config`
+      );
+      const data = await res.json();
+      setStripePromise(loadStripe(data.publishableKey));
+    }
+    stripePublishableKey();
   }, []);
 
   useEffect(() => {
-    fetch(
-      `https://luxury-living-server-o99b.onrender.com/payment/create-payment-intent`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          orders,
-        }),
-      }
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setClientSecret(data.clientSecret);
-        setLoading(false);
-      });
-  }, []);
+    async function stripePayment() {
+      const res = await fetch(
+        `${import.meta.env.VITE_SERVER_URL}/payment/create-payment-intent`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            orders,
+          }),
+        }
+      );
+      const data = await res.json();
+      setClientSecret(data.clientSecret);
+      setLoading(false);
+    }
+    !isLoading && stripePayment();
+  }, [orders]);
 
   return (
     <>
@@ -52,7 +56,6 @@ const Checkout = () => {
           <div className=" flex-[2] ">
             <CheckoutItems />
           </div>
-          {/* <hr className="border-2 h-full " /> */}
           <div className="border mx-2 border-dashed"></div>
           <div className=" flex-[1]">
             {clientSecret && (
@@ -60,11 +63,6 @@ const Checkout = () => {
                 <CheckOutForm />
               </Elements>
             )}
-            {/* {clientSecret && (
-              <Elements stripe={stripePromise} options={{ clientSecret }}>
-                <CheckOutForm />
-              </Elements>
-            )} */}
           </div>
         </div>
       )}

@@ -1,11 +1,15 @@
-import { useOrder } from "@/contexts/order-context/OrderContext";
 import { CiSquareRemove } from "react-icons/ci";
 import ButtonShared from "../Button/Button";
 import { useNavigate } from "react-router-dom";
 import HELMET from "../shared/HELMET/HELMET";
+import usePendingOrder from "@/hooks/usePendingOrder";
+import Delete from "@/actions/cart/deleteCart";
+import { useAuth } from "@/contexts/auth-context/AuthContext";
 
 const Cart = () => {
-  const { orders, Delete } = useOrder();
+  const { user } = useAuth();
+  const { orders, setOrders } = usePendingOrder();
+
   let sum = 0;
   orders?.forEach((order) => {
     sum = sum + order.price;
@@ -41,7 +45,16 @@ const Cart = () => {
                 <div>
                   <button
                     className="transition  rounded-lg hover:text-cBlue "
-                    onClick={() => Delete(order._id)}
+                    onClick={() =>
+                      Delete(order._id, user?._id).then((res) => {
+                        if (res.result.success) {
+                          const rest = orders.filter(
+                            (item) => item._id != order._id
+                          );
+                          setOrders(rest);
+                        }
+                      })
+                    }
                   >
                     <CiSquareRemove size={35} />
                   </button>

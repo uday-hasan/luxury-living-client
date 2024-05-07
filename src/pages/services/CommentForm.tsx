@@ -1,5 +1,5 @@
 import ButtonShared from "@/components/Button/Button";
-import { useComment } from "@/contexts/comments-context/CommentContext";
+import useComments from "@/hooks/useComments";
 import React from "react";
 
 const CommentForm = ({
@@ -9,7 +9,7 @@ const CommentForm = ({
   productId?: string;
   serviceName?: string;
 }) => {
-  const { addComment } = useComment();
+  const { addComment } = useComments();
   const [message, setMessage] = React.useState<{
     success: boolean;
     message: string | undefined;
